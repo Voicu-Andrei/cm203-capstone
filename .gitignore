@@ -1,0 +1,4 @@
+machine
+machine.exe
+*.o
+trace*.txt
