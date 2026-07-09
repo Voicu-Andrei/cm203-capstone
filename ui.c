@@ -1,6 +1,8 @@
 #include "cpu.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #ifdef _WIN32
 #  include <windows.h>
@@ -57,14 +59,10 @@ void ui_init(int plain)
 #endif
 }
 
-/* One key, no Enter needed on a terminal. From a pipe: next command character. */
-int ui_getkey(void)
+static int getkey_raw(void)
 {
-    if (!tty_in) {
-        int ch;
-        do ch = getchar(); while (ch == ' ' || ch == '\n' || ch == '\r' || ch == '\t');
-        return ch == EOF ? 'q' : ch;
-    }
+    if (!tty_in)
+        return getchar();
 #ifdef _WIN32
     for (;;) {
         int ch = _getch();
@@ -74,10 +72,53 @@ int ui_getkey(void)
 #else
     {
         unsigned char ch;
-        if (read(STDIN_FILENO, &ch, 1) != 1) return 'q';
+        if (read(STDIN_FILENO, &ch, 1) != 1) return EOF;
         return ch;
     }
 #endif
+}
+
+/* One key, no Enter needed on a terminal. From a pipe: next command character. */
+int ui_getkey(void)
+{
+    for (;;) {
+        int ch = getkey_raw();
+        if (ch == EOF) return 'q';
+        if (!tty_in && (ch == ' ' || ch == '\n' || ch == '\r' || ch == '\t')) continue;
+        return ch;
+    }
+}
+
+/* Read a short hex token (for poke), echoing keys; space/enter ends it,
+ * backspace works, q cancels. Returns 0 on cancel. */
+int ui_read_hex(const char *prompt, unsigned *out)
+{
+    char buf[8];
+    int len = 0;
+    printf("%s", prompt);
+    fflush(stdout);
+    for (;;) {
+        int k = getkey_raw();
+        if (k == EOF || k == 'q' || k == 'Q') return 0;
+        if (k == ' ' || k == '\r' || k == '\n' || k == '\t') {
+            if (len) break;
+            continue;
+        }
+        if ((k == 8 || k == 127) && len) {
+            len--;
+            printf("\b \b");
+            fflush(stdout);
+            continue;
+        }
+        if (len < 7 && (isxdigit(k) || k == 'x' || k == 'X')) {
+            buf[len++] = (char)k;
+            printf("%c", k);
+            fflush(stdout);
+        }
+    }
+    buf[len] = 0;
+    *out = (unsigned)strtoul(buf, 0, 16);
+    return 1;
 }
 
 void ui_msleep(int ms)
@@ -170,7 +211,7 @@ void ui_render(const CPU *c, const char *progname)
         printf(" %s*** MACHINE HALTED after %u instructions ***%s   [q] quit\n",
                cc(HALTB), c->instr_done, cc(RESET));
     else
-        printf(" [space] step one phase    [r] run to halt    [q] quit\n");
+        printf(" [space] step one phase   [r] run to halt   [p] poke memory   [q] quit\n");
 
     memcpy(prev_reg, c->reg, sizeof prev_reg);
     prev_z = c->zf;

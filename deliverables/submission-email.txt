@@ -1,0 +1,12 @@
+Subject: CM-203 capstone proposal — one-pager attached
+
+Dear Professor Moser,
+
+Please find attached my one-page project proposal for the CM-203 capstone: "An Instruction Is Just a Number — Watching a CPU Think."
+
+A working emulator already runs every demonstration end to end, and the final deliverable will pair a live, single-stepped fetch-decode-execute demo with a finale in which the program rewrites its own instructions while running.
+
+Happy to answer any questions or adjust scope if needed. Thank you for taking a look.
+
+Best regards,
+Andrei Voicu

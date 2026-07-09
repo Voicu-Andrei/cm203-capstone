@@ -5,6 +5,7 @@
 
 void ui_init(int plain);
 int  ui_getkey(void);
+int  ui_read_hex(const char *prompt, unsigned *out);
 void ui_msleep(int ms);
 void ui_render(const CPU *c, const char *progname);
 const char *load_demo(CPU *c, char which, int n);
@@ -70,6 +71,21 @@ int main(int argc, char **argv)
                 ui_render(&cpu, name);
                 ui_msleep(RUN_DELAY);
             }
+        } else if (k == 'p' || k == 'P') {
+            /* live hand-assembly: type a word straight into memory */
+            unsigned addr, val;
+            char d[32];
+            printf("\n");
+            if (ui_read_hex(" poke slot (hex): ", &addr) && addr < MEM_SIZE &&
+                ui_read_hex("   value (hex): ", &val)) {
+                cpu.mem[addr] = (uint16_t)val;
+                cpu.last_write = (int)addr;
+                disasm(cpu.mem[addr], d, sizeof d);
+                snprintf(cpu.msg, sizeof cpu.msg,
+                         "POKE     mem[0x%02X] <- 0x%04X  (%s)  -- hand-assembled by a human",
+                         addr, val & 0xFFFF, d);
+            }
+            ui_render(&cpu, name);
         }
     }
     return 0;
