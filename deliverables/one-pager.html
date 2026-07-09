@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CM-203 Capstone One-Pager</title>
+<style>
+  @page { size: A4; margin: 15mm 22mm; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 11pt; line-height: 1.29; color: #000;
+  }
+  h1 { font-size: 14.5pt; margin: 0 0 2pt 0; }
+  .meta { font-size: 10pt; color: #333; margin: 0 0 9pt 0; }
+  h2 {
+    font-size: 11pt; margin: 5pt 0 2pt 0;
+    text-transform: uppercase; letter-spacing: .4pt;
+    border-bottom: .5pt solid #999; padding-bottom: 1pt;
+  }
+  p { margin: 0 0 3pt 0; }
+  ul { margin: 2pt 0 3pt 0; padding-left: 16pt; }
+  li { margin: 0 0 1pt 0; }
+  code { font-family: Consolas, "Courier New", monospace; font-size: 9.5pt; }
+</style>
+</head>
+<body>
+
+<h1>An Instruction Is Just a Number — Watching a CPU Think</h1>
+<p class="meta">CM-203 Computer Organization · Capstone one-pager · Andrei Voicu · July 2026</p>
+
+<h2>Problem statement / objective</h2>
+<p>
+Every computer runs one loop — fetch, decode, execute — billions of times a second, invisibly. This capstone
+builds a complete Von Neumann machine in software — unified memory, registers, a program counter, an ALU, and
+my own instruction set — and slows it to <i>one heartbeat at a time</i>, so the audience watches each phase
+happen live. Then it proves the central claim of the architecture — an instruction and a number are the
+<i>same bits in the same memory</i>, distinguished only by the lens — first by reading one word both ways,
+finally with a program that rewrites its own instructions while running.
+</p>
+
+<h2>Approach and technical setup / environment</h2>
+<p>
+The machine is ~500 lines of dependency-free C99 (Windows, Linux/WSL2, and an Arduino UNO&nbsp;Q's Linux side):
+256 × 16-bit words of memory holding <i>both</i> program and data, registers R0–R3, an 8-bit PC that wraps like
+a real address bus, an instruction register, and a zero flag. Instructions are fixed-width —
+<code>[opcode:4 | reg:4 | operand:8]</code> — every field one hex digit, so any word can be hand-assembled on
+stage, and the 8-bit operand names exactly the 256 memory slots, by design. The terminal interface shows every
+word through <i>both lenses at once</i> (as a number and as an instruction), highlights the PC's slot and the
+most recently rewritten slot, and narrates each phase in plain English; execution is deterministic, so the live
+demo is exactly reproducible. The demonstrations:
+</p>
+<ul>
+  <li><b>The heartbeat</b> — one keypress per phase: fetch (IR ← <code>mem[PC]</code>, PC advances), decode
+      (the word splits into fields), execute (the ALU fires, a register changes).</li>
+  <li><b>A loop that decides</b> — sum 1..N: <code>SUB</code> drives the zero flag, <code>JNZ</code> throws the
+      PC backwards until the flag flips — the branch visibly taken, then not taken, then 55 appears.</li>
+  <li><b>The reveal</b> — the word just executed as <code>ADD R0, R1</code> is printed as plain data: 8193.
+      Identical bits (<code>0x2001</code>); only the lens differs.</li>
+  <li><b>Being the assembler</b> — encode <code>ADD R0, R1</code> live, field by field, into <code>0x2001</code>,
+      type the number straight into memory, and run it: the program was never magic, it's bits.</li>
+  <li><b>The program that writes its own ending</b> — as loaded it can never stop: its last word jumps back to
+      the start. Mid-run it <code>STORE</code>s the number 0 over that slot — and 0, read as an instruction, is
+      <code>HALT</code>. When the PC arrives, the machine executes the program's own edit. Only a shared
+      instruction/data memory allows this; real CPUs forbid it (W^X, instruction caches).</li>
+  <li><b>A physical heartbeat</b> (stretch) — the Arduino UNO&nbsp;Q blinks one LED per phase, driven by the
+      emulator's phase hook: the invisible loop, visible across the room.</li>
+</ul>
+<p>
+The machine is already built and working: both demo programs run end to end, in a public repo whose commit
+history doubles as the lab notebook (<code>github.com/Voicu-Andrei/cm203-capstone</code>).
+</p>
+
+<h2>Topics from "Computer Organization" addressed</h2>
+<p>
+Core (Ch. 5): the Von Neumann model, fetch–decode–execute, registers, PC and IR, ALU and flags, unified memory.
+Connected areas: Ch. 1–3 — the whole machine is one C struct and one array, the memory model made literal;
+Ch. 4 — the word type is <code>uint16_t</code>, so two's-complement wraparound is real, and "same bits,
+different lens" is the thesis itself; Ch. 6–10 — designing an ISA and hand-assembling it, with real parallels:
+my <code>CMP</code> is x86's <code>CMP</code> (a subtraction that discards its result) and the fixed-width,
+twelve-instruction set is RISC-shaped, like ARM64. Deliberately abstracted: pipelines, caches, gates, timing.
+</p>
+
+<h2>Relevant outcomes / why this is interesting</h2>
+<p>
+The invisible machinery becomes watchable: why an instruction and a number are the same thing, what a branch
+physically is, and why self-modifying code is trivial here yet forbidden in real CPUs — the power and the
+danger of the Von Neumann model. Every register, instruction, and width has a reason I can defend — depth
+over breadth, live and reproducible.
+</p>
+
+</body>
+</html>
