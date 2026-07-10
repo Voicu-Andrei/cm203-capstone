@@ -1,3 +1,7 @@
+/* The core is strict C99; this file is where the platform lives. On glibc,
+ * strict ISO mode hides POSIX names (nanosleep, timespec) unless asked: */
+#define _POSIX_C_SOURCE 200809L
+
 #include "cpu.h"
 #include <stdio.h>
 #include <stdlib.h>
