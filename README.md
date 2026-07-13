@@ -13,13 +13,16 @@ The thesis, made visible and then proven with self-modifying code:
 
 ```sh
 make            # or: gcc -std=c99 -Wall -Wextra -O2 -o machine main.c cpu.c ui.c programs.c
+./machine       # THE SHOW: the whole talk as four acts, one command, [n] to advance
 ./machine A     # demo A: sum 1..10 (a loop with a branch)
 ./machine A -n 3   # same loop, short enough to single-step live
 ./machine B     # demo B: self-modifying code — the program writes its own ending
 ./machine A --run  # headless: run to HALT, print output + final state
 ```
 
-Keys: `space` = one phase · `r` = run to halt (animated) · `q` = quit.
+Keys: `space` = one phase · `r` = run to halt (animated) · `p` = poke memory ·
+`q` = quit. In show mode also: `n` = next act · `1`–`4` = jump to an act with a
+fresh machine (instant recovery if anything glitches mid-talk).
 Portable C99 — builds on Windows (mingw), Linux, WSL, and the Arduino UNO Q's Linux side.
 
 ## The machine
@@ -48,7 +51,7 @@ discards its result — same as x86.
 - `cpu.h` / `cpu.c` — the machine: state struct, fetch/decode/execute, disassembler
 - `ui.c` — the terminal UI: memory shown through *both lenses* (number + instruction), PC and last-written slots highlighted
 - `programs.c` — the demo programs, hand-assembled, with the encoding worked out in comments
-- `main.c` — step loop, run mode, headless mode
+- `main.c` — step loop, run mode, headless mode, and show mode (the four-act talk)
 - `docs/` — capstone plan and one-pager
 
 `cpu_phase_hook` in `cpu.h` emits `'F'/'D'/'E'` once per phase — the attachment

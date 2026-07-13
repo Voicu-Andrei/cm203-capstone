@@ -26,6 +26,12 @@ static void restore_tio(void) { if (tio_saved) tcsetattr(STDIN_FILENO, TCSANOW, 
 
 static int color_on = 1;
 static int tty_in = 1;
+static char act_line[96];   /* show mode's footer; empty = not in show mode */
+
+void ui_set_act(const char *line)
+{
+    snprintf(act_line, sizeof act_line, "%s", line ? line : "");
+}
 
 /* every color goes through cc() so --plain can turn the whole UI monochrome */
 static const char *cc(const char *code) { return color_on ? code : ""; }
@@ -93,9 +99,9 @@ int ui_getkey(void)
     }
 }
 
-/* Read a short hex token (for poke), echoing keys; space/enter ends it,
+/* Read a short number (base 10 or 16), echoing keys; space/enter ends it,
  * backspace works, q cancels. Returns 0 on cancel. */
-int ui_read_hex(const char *prompt, unsigned *out)
+int ui_read_num(const char *prompt, int base, unsigned *out)
 {
     char buf[8];
     int len = 0;
@@ -114,14 +120,15 @@ int ui_read_hex(const char *prompt, unsigned *out)
             fflush(stdout);
             continue;
         }
-        if (len < 7 && (isxdigit(k) || k == 'x' || k == 'X')) {
+        if (len < 7 &&
+            (base == 16 ? (isxdigit(k) || k == 'x' || k == 'X') : isdigit(k))) {
             buf[len++] = (char)k;
             printf("%c", k);
             fflush(stdout);
         }
     }
     buf[len] = 0;
-    *out = (unsigned)strtoul(buf, 0, 16);
+    *out = (unsigned)strtoul(buf, 0, base);
     return 1;
 }
 
@@ -216,6 +223,8 @@ void ui_render(const CPU *c, const char *progname)
                cc(HALTB), c->instr_done, cc(RESET));
     else
         printf(" [space] step one phase   [r] run to halt   [p] poke memory   [q] quit\n");
+    if (act_line[0])
+        printf(" %s%s%s\n", cc(DIM), act_line, cc(RESET));
 
     memcpy(prev_reg, c->reg, sizeof prev_reg);
     prev_z = c->zf;
