@@ -130,10 +130,23 @@ instruction out loud using the format — each field is a whole hex digit on pur
                      →  the word 1307
 ```
 
+**1307 is an example, not a fixed number** — it changes with their answers. The recipe
+is always: **1, their pocket, 0, their digit.** (Pocket 2, digit 9 → `1209`.)
+
 Press `p`, slot `00`, value `1307`. The poke writes your number straight into box 00 —
 which until that moment held the program's real first instruction. **You just replaced
-a line of the program with a number you made up on stage.** The box glows yellow and
-the bold line confirms: `POKE mem[0x00] <- 0x1307 (LOAD R3, #7) -- hand-assembled by a human`.
+a line of the program with a number you made up on stage.** The box glows yellow —
+yellow always means "this box was just written to" — and the bold line confirms:
+`POKE mem[0x00] <- 0x1307 (LOAD R3, #7) -- hand-assembled by a human`.
+
+Nothing has RUN yet — poke only placed the number. The finger still rests on box 00,
+now pointing at your number. That's why the three `space` presses come next: grab
+(your number enters the IR), understand (it splits into 1|3|07 → LOAD R3, #7), do
+(pocket R3 gets their digit). Then STOP — payoff done; `n` when ready.
+
+**Q&A ammo:** there is no assembler program in this project, on purpose — you are the
+assembler. If someone asks how the demos were written, open `programs.c`: raw numbers
+on the left, human comments on the right. The machine only ever sees the numbers.
 
 Then three presses of `space` — grab, understand, do — and **pocket R3 holds their 7**.
 The machine fetched a human-typed number and ran it as an instruction, with the exact
