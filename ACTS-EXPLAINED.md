@@ -21,6 +21,32 @@ instructions are just setup — filling pockets:
 | **R1** | 3 | **The countdown.** How many laps are left — *and* the number being added each lap. |
 | **R2** | 1 | **Just holds a 1.** SUB can only subtract pocket-from-pocket, so we park a 1 here to use every lap. |
 
+**Two more things on the screen — the PC and the IR:**
+
+- **PC (Program Counter) — the finger.** It holds one number: which box comes NEXT.
+  It starts at 00, and the cyan row is wherever it points. Fetch moves it forward by
+  one, automatically; only a jump can move it anywhere else.
+- **IR (Instruction Register) — the hand holding the current line.** Fetch copies the
+  finger's box into the IR; decode then reads the fields out of the IR, not out of
+  memory. **PC says *where*, IR holds *what*.**
+
+**Before the loop — the first nine presses (boxes 00 → 02):**
+
+The machine wakes up empty: every pocket 0, note blank, finger on box 00. The first
+three instructions are pure setup — filling the pockets, three presses each:
+
+| Box | Instruction | After its "do" press |
+|-----|-------------|----------------------|
+| 00 | `LOAD R0, #0` | total pocket set to 0 |
+| 01 | `LOAD R1, #3` | countdown pocket set to 3 |
+| 02 | `LOAD R2, #1` | the spare 1 parked |
+
+(Why load 0 into a pocket that's already 0? Because programs never trust leftovers —
+a pocket could hold anything from whatever ran before. Real code always sets its own
+starting values. Say that if anyone asks; it's the honest habit, not an accident.)
+
+Nine presses in, the finger stands on box 03 — and only now does the loop begin.
+
 Then the loop — three instructions the machine runs over and over:
 
 - `ADD R0, R1` — add the countdown to the total
