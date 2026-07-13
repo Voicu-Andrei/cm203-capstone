@@ -79,10 +79,13 @@ Type `./machine B` — **do NOT press Enter.** Leave it. Back to T1.
 4. Press `space` → EXECUTE. Say **"do"** — pocket R0 just became 0. *"That's the whole
    secret. Everything else today is this, faster."*
 5. Keep pressing `space` at talking pace. The cyan row walks down the boxes.
-6. **Press 18** is the payoff: the cyan row LEAPS from box 05 back up to box 03.
-   STOP. Point. *"Nobody told it to go back. It looked at a result and DECIDED."*
-7. Keep stepping — the leap happens twice more (presses 27, then the loop ends).
-   **Press 39**: OUTPUT shows **6**. **Press 42**: red HALTED banner. Act done.
+6. **The payoff — watch for the cyan row sitting on box 05** (`JNZ 0x03`, the jump).
+   The next three presses are that jump's grab-understand-do, and on the **"do"** the
+   cyan row LEAPS from 05 back up to 03. STOP. Point.
+   *"Nobody told it to go back. It looked at a result and DECIDED."*
+   *(If you like counting instead: it's your 18th space press — 3 presses per instruction, 6th instruction.)*
+7. Keep stepping — the leap happens twice more, once per loop pass. Then OUTPUT
+   shows **6**, and three presses later: red HALTED banner. Act done. ~42 presses total.
    *(Running late? At any point press `r` and it finishes itself, animated.)*
 
 ## ACT 2 — YOU vs THE MACHINE (2:30 – 4:00)
@@ -115,8 +118,9 @@ Type `./machine B` — **do NOT press Enter.** Leave it. Back to T1.
 1. Press `n` → the finale loads. **Don't step yet.**
 2. Point at box **07**: `JMP 0x00`. *"The last line says GO BACK TO THE START. This
    program can never stop. I'll bet anyone here it stops anyway."* Take the bet.
-3. Press `space` **six times, slowly** (two instructions). On press 6, box **07 glows
-   yellow** and its right column flips from `JMP 0x00` to `HALT`. Point:
+3. Press `space` **six times, slowly** — that's the first two instructions, grab-understand-do
+   twice. On the sixth press (the STORE's "do"), box **07 glows yellow** and its right
+   column flips from `JMP 0x00` to `HALT`. Point:
    *"The program just wrote the number 0 into one of its own boxes. Zero, read through
    the instruction lens, means HALT. It wrote its own ending — it just hasn't arrived yet."*
 4. Keep a steady `space` rhythm through the countdown — OUTPUT grows **3… 2… 1** —
