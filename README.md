@@ -54,5 +54,8 @@ discards its result — same as x86.
 - `main.c` — step loop, run mode, headless mode, and show mode (the four-act talk)
 - `docs/` — capstone plan and one-pager
 
-`cpu_phase_hook` in `cpu.h` emits `'F'/'D'/'E'` once per phase — the attachment
-point for the Arduino UNO Q LED heartbeat (stretch goal).
+`cpu_phase_hook` in `cpu.h` emits `'F'/'D'/'E'` once per phase. On the Arduino
+UNO Q's Linux side the machine finds the board's free user RGB LED in
+`/sys/class/leds` and drives it automatically — FETCH = blue, DECODE = green,
+EXECUTE = red — so stepping the emulator blinks a physical heartbeat. No flag
+needed; on machines without those LEDs the hook simply stays unset.

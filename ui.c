@@ -45,10 +45,73 @@ static const char *cc(const char *code) { return color_on ? code : ""; }
 #define CHG    "\x1b[93m"      /* bright yellow:   value changed this step     */
 #define HALTB  "\x1b[97;41m"   /* white on red:    halted banner               */
 
+/* ---- the physical heartbeat (Arduino UNO Q) ---------------------------
+ * The board's Linux side exposes its free user RGB LED through sysfs.
+ * If all three channels are writable, the phase hook drives them:
+ * FETCH = blue (grab), DECODE = green (understand), EXECUTE = red (do).
+ * On any other machine the files don't exist and the hook stays unset. */
+static const char *led_dir[3] = {
+    "/sys/class/leds/unoq:user-blue1",
+    "/sys/class/leds/unoq:user-green1",
+    "/sys/class/leds/unoq:user-red1",
+};
+static char led_path[3][80];   /* .../brightness, empty = heartbeat off */
+static int  led_max[3];
+
+static void led_set(int i, int on)
+{
+    /* reopen per write: sysfs wants each value as one write at offset 0 */
+    FILE *f = led_path[i][0] ? fopen(led_path[i], "w") : 0;
+    if (f) {
+        fprintf(f, "%d\n", on ? led_max[i] : 0);
+        fclose(f);
+    }
+}
+
+static void led_phase(char ph)
+{
+    int lit = (ph == 'F') ? 0 : (ph == 'D') ? 1 : 2;
+    int i;
+    for (i = 0; i < 3; i++) led_set(i, i == lit);
+}
+
+static void leds_off(void)
+{
+    int i;
+    for (i = 0; i < 3; i++) led_set(i, 0);
+}
+
+static void leds_init(void)
+{
+    char path[96];
+    int i, ok = 1;
+    for (i = 0; i < 3; i++) {
+        FILE *f;
+        led_max[i] = 1;
+        snprintf(path, sizeof path, "%s/max_brightness", led_dir[i]);
+        if ((f = fopen(path, "r"))) {
+            if (fscanf(f, "%d", &led_max[i]) != 1 || led_max[i] < 1) led_max[i] = 1;
+            fclose(f);
+        }
+        snprintf(path, sizeof path, "%s/trigger", led_dir[i]);
+        if ((f = fopen(path, "w"))) { fputs("none\n", f); fclose(f); }
+        snprintf(led_path[i], sizeof led_path[i], "%s/brightness", led_dir[i]);
+        if ((f = fopen(led_path[i], "w"))) fclose(f);
+        else ok = 0;
+    }
+    if (ok) {
+        cpu_phase_hook = led_phase;
+        atexit(leds_off);
+    } else {
+        for (i = 0; i < 3; i++) led_path[i][0] = 0;
+    }
+}
+
 void ui_init(int plain)
 {
     color_on = !plain;
     tty_in = ISATTY_IN();
+    leds_init();
 #ifdef _WIN32
     if (color_on) {
         HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
