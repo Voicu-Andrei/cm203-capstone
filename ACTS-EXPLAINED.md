@@ -78,3 +78,50 @@ SAME 16 bits shown through two lenses. Read as fields (`2|0|01`) they mean "ADD 
 and pocket 1"; read as a plain number they're 8193. The machine never marks which
 reading is "true" — a word is an instruction only because the finger arrives there.
 Say: *"Keep that in mind for the finale."* — Act 4 is this sentence, weaponized.
+
+**If you want the C parallel (one spoken sentence, no slides):** the whole loop is
+`while (n != 0) { sum += n; n--; }` — and it maps line for line: `sum += n` is the ADD,
+`n--` is the SUB, and `while (n != 0)` **is** the JNZ — "Jump if Not Zero" is the same
+words. Every while-loop ever compiled becomes exactly this shape.
+
+---
+
+## ACT 3 — you are the assembler
+
+**The claim this act proves:** a program is just numbers someone put in the boxes, and
+an "assembler" is nothing but a translator from words to numbers. You do the
+translator's job live, by hand, and the machine cannot tell the difference — because
+there is no difference.
+
+**The mechanics.** Press `n`: a fresh copy of the sum program loads, at rest, finger on
+box 00. Ask the room for a **pocket (0–3)** and a **digit (0–9)**. Now build the
+instruction out loud using the format — each field is a whole hex digit on purpose:
+
+```
+[ opcode : 1 digit ][ pocket : 1 digit ][ value : 2 digits ]
+     1 = "put a number       3                07
+          in a pocket"
+                     →  the word 1307
+```
+
+Press `p`, slot `00`, value `1307`. The poke writes your number straight into box 00 —
+which until that moment held the program's real first instruction. **You just replaced
+a line of the program with a number you made up on stage.** The box glows yellow and
+the bold line confirms: `POKE mem[0x00] <- 0x1307 (LOAD R3, #7) -- hand-assembled by a human`.
+
+Then three presses of `space` — grab, understand, do — and **pocket R3 holds their 7**.
+The machine fetched a human-typed number and ran it as an instruction, with the exact
+same three phases it uses for "real" code.
+
+**Why slot 00:** the finger starts there, so your hand-made instruction is the very
+next thing the machine runs — three presses to payoff. After the payoff, stop; don't
+keep stepping (the rest is just the sum program, which is not the point). Press `n`
+for the finale when ready.
+
+**Why digits 0–9 only:** values 10–15 would need hex letters (A–F). Never convert
+number systems live on stage.
+
+**The line to land:** *"I didn't write code. I wrote a NUMBER into a box, and because
+the finger walked over it, it became an instruction. That's all any program is —
+numbers someone put in the boxes. The tool that normally does this translation for
+you is called an assembler. Tonight, I was the assembler."*
