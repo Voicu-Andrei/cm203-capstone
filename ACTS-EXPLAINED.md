@@ -175,6 +175,19 @@ now pointing at your number. That's why the three `space` presses come next: gra
 assembler. If someone asks how the demos were written, open `programs.c`: raw numbers
 on the left, human comments on the right. The machine only ever sees the numbers.
 
+**Ready-made pokes** (fresh machine: press `3` · poke: `p`, slot, `Enter`, value, `Enter`
+· first two are stage-safe, rest are playground · details in `POKES.md`):
+
+| Poke | Steps | Result |
+|------|-------|--------|
+| `00`=`1307` | ×3 | R3 = 7 — the classic (1, pocket, 0, digit) |
+| `00`=`1305` + `01`=`2303` | ×6 | R3 = 5, then **10** — the doubler (ADD R3,R3) |
+| `00`=`1307` + `01`=`b300` | ×6 | OUTPUT: 7 — it prints (OUT R3) |
+| `00`=`1307` + `01`=`0000` | ×6 | HALT — you wrote your own ending |
+| `00`=`1301` + `01`=`5000` | step only, **never `r`** | infinite loop — escape with `3` |
+| `00`=`f000` | ×3 | fault — unknown opcode, the machine refuses |
+| `10`=`2001` | just look | row shows `8193` AND `ADD R0, R1` — both lenses, never run |
+
 ---
 
 ## ACT 4 — the program that rewrites itself (T1 only)
