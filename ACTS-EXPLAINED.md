@@ -148,6 +148,75 @@ now pointing at your number. That's why the three `space` presses come next: gra
 assembler. If someone asks how the demos were written, open `programs.c`: raw numbers
 on the left, human comments on the right. The machine only ever sees the numbers.
 
+---
+
+## ACT 4 — the program that rewrites itself (T1 only)
+
+**The bridge from Act 3:** in Act 3, a *human* wrote a number into a box and it became
+an instruction. Act 4 asks: what if the *program* did that to itself? One new
+instruction makes it possible — **STORE**, the mirror of LOAD: it copies a pocket INTO
+a box. It's the only instruction that writes memory. Poke was you writing a box by
+hand; STORE is the program holding the pen.
+
+The program, box by box:
+
+| Box | Instruction | Plain words |
+|-----|-------------|-------------|
+| 00 | `LOAD R2, #0` | put 0 in a pocket — "just a number" |
+| 01 | `STORE R2, [07]` | copy that 0 into box 07 ← **the sabotage** |
+| 02 | `LOAD R0, #3` | countdown starts at 3 |
+| 03 | `LOAD R1, #1` | the spare 1 |
+| 04 | `OUT R0` | print the counter ← loop top |
+| 05 | `SUB R0, R1` | knock 1 off, writes the note |
+| 06 | `JNZ 04` | not zero? back up to 04 |
+| 07 | `JMP 00` | **go back to the start — forever** |
+
+**The story, in order:**
+
+1. **Before touching anything**, read box 07 to the room: "the last line says GO BACK
+   TO THE START. This program loops forever — it can never stop. I'll bet anyone it
+   stops anyway." Take the bet.
+2. **Six slow presses** — that's the first two instructions. On press 6 (the STORE's
+   "do"), box 07 **glows yellow** — same yellow as your Act 3 poke, but the author is
+   the program — and its right column flips from `JMP 0x00` to `HALT`. Why: the number
+   0, read through the instruction lens, means HALT (opcode 0). Say: *"It wrote its
+   own ending. It just hasn't arrived there yet."*
+3. **Steady rhythm** through the countdown — same loop shape as Act 1 (OUT, SUB, JNZ).
+   OUTPUT grows **3… 2… 1** — get the room counting. The yellow box just waits.
+   (~36 presses; `r` finishes it in a second if time is dying.)
+4. R0 hits zero, the note flips, JNZ falls through — the finger slides onto box 07
+   and executes the HALT **the program wrote for itself**. Red banner.
+5. Land it: *"Instructions and data share one memory — that's the whole Von Neumann
+   idea, and you just watched its deepest consequence. In a machine with separate
+   code and data memories, that STORE could never have reached the program. And real
+   chips forbid exactly this — memory is writable OR executable, never both — because
+   data becoming code is how attacks work. My toy allows what real silicon prevents."*
+
+---
+
+## THE CLOSE — the two terminals (7:00)
+
+All of Acts 1–4 happened on **T1**. T2 (the App Lab shell) has been parked the whole
+time with `./machine B` typed and never entered. Now, with T1 frozen on the finale's
+red HALTED banner:
+
+1. **Switch windows to T2.** Don't touch T1 again — the red banner is your backdrop.
+2. **Say the line while pointing at the board:** *"Five hundred lines of C. It doesn't
+   need my laptop — this is a computer the size of a credit card."*
+3. **Press `Enter`** — the same doomed program the room just watched loads on the Arduino.
+4. **Press `space` three times, slowly**, eyes on the board: the LED goes
+   **blue… green… red**. *"Grab. Understand. Do. That light IS the machine thinking."*
+5. **Press `r`** — the countdown runs on the board, heartbeat flickering, and the
+   program halts itself again. **The LED sticks on red.** *"It stopped on 'do' —
+   the last thing it ever did."*
+6. **Final line:** *"Real CPUs run this exact loop — pipelined, cached, protected.
+   An instruction is just a number. The lens decides."* Done. Leave both screens as
+   they are for Q&A.
+
+Why T2 runs the same program: the room already knows the story — so this time they
+don't watch the screen, they watch the *hardware*. Same bits, same ending, physical
+heartbeat. Nothing new to explain, everything new to feel.
+
 Then three presses of `space` — grab, understand, do — and **pocket R3 holds their 7**.
 The machine fetched a human-typed number and ran it as an instruction, with the exact
 same three phases it uses for "real" code.
