@@ -252,6 +252,38 @@ It faithfully implements the *architecture* — the state machine a programmer s
 electricity and timing. That's the same line the industry draws between an ISA manual
 and a chip design, and it's deterministic, which is why the live demo is safe.
 
+**Is this a simulation?**
+It's an emulator, which is stronger. A simulation imitates behavior approximately —
+a weather simulation doesn't rain. An emulator implements the actual rules completely,
+so real programs genuinely run: the 256 words are a real array, decode really splits
+bits, the answers are really computed instruction by instruction. Not modeled: gates,
+voltages, timing, pipeline — the electrical layer. "Real the way chess on a screen is
+real chess — every rule genuinely followed; I just didn't carve the pieces."
+
+**What language / how big?**
+Strict C99, ~500 lines, nothing beyond the standard library. Four files: cpu.c (the
+machine), ui.c (terminal + platform), programs.c (hand-assembled demos), main.c (the
+step loop and modes). Why C beyond it being the course language: fixed-width types
+make the machine honest — `uint16_t` words mean real two's-complement wraparound, a
+`uint8_t` PC wraps at 256 by itself like a real 8-bit address bus — and the identical
+source compiles unchanged on Windows, Linux, and the board's ARM chip.
+
+**How did you design the interface?**
+The state display IS the deliverable (the plan: "this readout is your entire UI —
+invest in it"). Three rules: (1) show the whole machine at once — registers, PC, IR,
+flag, memory, output — no hidden state to take on faith; (2) highlight only what just
+changed — cyan = PC's row, yellow = freshly written cell, green = the phase that ran;
+(3) every memory word shown through both lenses at once — plain number AND disassembled
+instruction — so the UI states the thesis permanently. In short: a debugger's
+register-and-memory view, redesigned for an audience.
+
+**Laptop run — is the UNO Q involved?**
+No. Two independent machines, two copies of the same program: laptop source compiled
+for x86-64 runs on the laptop's CPU; the board's copy was compiled by the board's own
+gcc for its ARM chip and runs entirely there. The USB cable is only a window into the
+board's terminal — no computation crosses it. That's the point of the close: same 500
+lines, two silicons, same ending — the machine is the rules, not the hardware.
+
 ---
 
 ## §10 · Pocket glossary (last-minute cram)
