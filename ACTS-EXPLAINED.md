@@ -294,8 +294,12 @@ next thing the machine runs — three presses to payoff. After the payoff, stop;
 keep stepping (the rest is just the sum program, which is not the point). Press `n`
 for the finale when ready.
 
-**Why digits 0–9 only:** values 10–15 would need hex letters (A–F). Never convert
-number systems live on stage.
+**Why digits 0–9 only, and why the recipe's 0 matters:** the value field is the last
+TWO digits, read in hex — where the second place counts SIXTEENS, not tens. So `1110`
+is not "put 10 in R1": it's `LOAD R1, #16` (1 sixteen + 0). The recipe's `0` pads the
+field so their digit sits alone in the ones place, where hex and decimal agree.
+(Want an actual ten? That's `110A` — ten in hex is `A`, and letters on stage are why
+you never take numbers above 9 from the audience.)
 
 **The line to land:** *"I didn't write code. I wrote a NUMBER into a box, and because
 the finger walked over it, it became an instruction. That's all any program is —
