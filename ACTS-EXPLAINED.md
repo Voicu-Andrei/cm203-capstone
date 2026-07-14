@@ -64,6 +64,13 @@ Lap by lap:
 On screen: **R0 climbs 0 → 3 → 5 → 6** and **R1 ticks down 3 → 2 → 1 → 0**. When the
 loop ends, `OUT R0` prints the 6 and `HALT` stops the machine.
 
+> 🎤 First instruction, one word per press: **"Grab. Understand. Do."** …then:
+> *"That's the whole secret. Everything else today is this, faster."*
+>
+> 🎤 The leap: **"Nobody told it to go back. It looked at a result and DECIDED."**
+>
+> 🎤 The halt: *"It never knew it was summing. It read one bit, and the answer fell out."*
+
 **The jump, briefly:** normally the finger (PC) just slides down the recipe one line at
 a time. A jump is an instruction whose "do" step **overwrites the PC** — write 03 into
 it, and the next fetch grabs box 03. That's the whole trick. `JNZ 03` does it *only if
@@ -90,10 +97,16 @@ button between them. Single-stepping was the artificial part; run mode is what a
 actually is. Nothing is skipped, nothing is faked, it's the same heartbeat without you
 holding its hand.
 
+> 🎤 After they give the number: **"You just programmed it — your number is sitting in box 01 right now."**
+>
+> 🎤 Before pressing `r`: **"Same machine, same heartbeat — I just stopped holding its hand."**
+
 **The scale of it** (for N = 12): the loop runs 12 laps — 41 instructions, 123 phases —
 and finishes in a few seconds. You spent a minute and a half doing 3 laps by hand.
 And this machine is still deliberately slowed so it's watchable: a real core does
 **billions** of instructions per second. Same loop. Only faster.
+
+> 🎤 After the halt: **"A real chip isn't doing something different. It's doing THIS — a billion times faster."**
 
 **Party trick (optional):** the answer is always N×(N+1)÷2 — for 12 that's 78. Someone
 with a phone can check the machine live.
@@ -144,6 +157,12 @@ now pointing at your number. That's why the three `space` presses come next: gra
 (your number enters the IR), understand (it splits into 1|3|07 → LOAD R3, #7), do
 (pocket R3 gets their digit). Then STOP — payoff done; `n` when ready.
 
+> 🎤 While typing the poke: **"I didn't write code. I wrote a number."**
+>
+> 🎤 Pointing at the pocket: **"Tonight, I am the assembler."**
+>
+> 🎤 Walking away from it: *"A program is just numbers someone put in boxes."*
+
 **Q&A ammo:** there is no assembler program in this project, on purpose — you are the
 assembler. If someone asks how the demos were written, open `programs.c`: raw numbers
 on the left, human comments on the right. The machine only ever sees the numbers.
@@ -170,6 +189,14 @@ The program, box by box:
 | 05 | `SUB R0, R1` | knock 1 off, writes the note |
 | 06 | `JNZ 04` | not zero? back up to 04 |
 | 07 | `JMP 00` | **go back to the start — forever** |
+
+> 🎤 The bet: **"This program can never stop. I'll bet anyone here it stops anyway."**
+>
+> 🎤 Press 6, box 07 yellow: **"Same yellow as my poke — but look who's holding the pen now."**
+>
+> 🎤 Then: **"It wrote its own ending. It just hasn't arrived there yet."**
+>
+> 🎤 The red banner: **"You just watched the one trick real chips are built to forbid."**
 
 **The story, in order:**
 
@@ -216,6 +243,39 @@ red HALTED banner:
 Why T2 runs the same program: the room already knows the story — so this time they
 don't watch the screen, they watch the *hardware*. Same bits, same ending, physical
 heartbeat. Nothing new to explain, everything new to feel.
+
+> 🎤 The board: **"That light is the machine thinking."**
+>
+> 🎤 The stuck red LED: **"It stopped on 'do' — the last thing it ever did."**
+>
+> 🎤 Q&A, if asked "is it a simulation?": *"It's real the way chess on a screen is real
+> chess — every rule genuinely followed. I just didn't carve the pieces out of wood."*
+
+---
+
+## 🎤 All the lines, in firing order (last-minute cram)
+
+1. **Hook:** "Nobody ever sees it. I built a computer where you can."
+2. **Act 1, first instruction:** "Grab. Understand. Do. That's the whole secret —
+   everything else today is this, faster."
+3. **Act 1, the leap:** "Nobody told it to go back. It looked at a result and DECIDED."
+4. **Act 1, halt:** "It never knew it was summing. It read one bit, and the answer fell out."
+5. **Act 2, their number in:** "You just programmed it — your number is in box 01 right now."
+6. **Act 2, before `r`:** "Same machine, same heartbeat — I just stopped holding its hand."
+7. **Act 2, after halt:** "A real chip isn't doing something different. It's doing THIS —
+   a billion times faster."
+8. **Act 2, the reveal:** "I converted nothing. One thing in memory, two ways to read it.
+   Keep that in mind for the finale."
+9. **Act 3, typing the poke:** "I didn't write code. I wrote a number."
+10. **Act 3, the payoff:** "Tonight, I am the assembler."
+11. **Act 4, the bet:** "This program can never stop. I'll bet anyone here it stops anyway."
+12. **Act 4, the yellow box:** "Same yellow as my poke — but look who's holding the pen now."
+13. **Act 4, waiting:** "It wrote its own ending. It just hasn't arrived there yet."
+14. **Act 4, the banner:** "You just watched the one trick real chips are built to forbid."
+15. **Close, the LED:** "That light is the machine thinking."
+16. **Close, stuck on red:** "It stopped on 'do' — the last thing it ever did."
+17. **The last words:** "Real CPUs run this exact loop — pipelined, cached, protected.
+    An instruction is just a number. **The lens decides.**"
 
 Then three presses of `space` — grab, understand, do — and **pocket R3 holds their 7**.
 The machine fetched a human-typed number and ran it as an instruction, with the exact
