@@ -143,6 +143,14 @@ instruction out loud using the format — each field is a whole hex digit on pur
                      →  the word 1307
 ```
 
+**Boxes vs pockets — the three numbers of this act live in two worlds.** Memory boxes
+(256 of them, `00`–`FF`, the big list on screen) are the shelf where the program lives.
+Pockets (R0–R3, the REGISTERS line) are the four hands where math happens. They're
+separate places — R3 has nothing to do with box 03. In this act: slot `00` is a BOX
+(where your instruction goes), `1307` is the instruction itself (the number placed in
+that box), and the `3` inside it names a POCKET (where the instruction, once run, puts
+the 7). You write to the shelf; your instruction writes to a hand.
+
 **1307 is an example, not a fixed number** — it changes with their answers. The recipe
 is always: **1, their pocket, 0, their digit.** (Pocket 2, digit 9 → `1209`.)
 
