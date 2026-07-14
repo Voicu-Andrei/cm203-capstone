@@ -1,7 +1,7 @@
 # CHEATSHEET — press-by-press, no thinking required
 
 **T1** = the show terminal (laptop) · **T2** = the board's shell (App Lab, over USB).
-**T2 does nothing until the CLOSE at 7:00.** It sits parked with its command pre-typed.
+**T2 does nothing until the CLOSE at 8:45.** It sits parked with its command pre-typed.
 
 ---
 ---
@@ -69,7 +69,7 @@ Type `./machine B` — **do NOT press Enter.** Leave it. Back to T1.
 ---
 ---
 
-## ACT 1 — THE HEARTBEAT (0:00 – 2:30)
+## ACT 1 — THE HEARTBEAT (0:00 – 3:00)
 
 1. **Press nothing.** Say the hook over the resting screen: *"Every computer runs one tiny
    routine billions of times a second — grab a number, figure out what it says, do it.
@@ -88,7 +88,7 @@ Type `./machine B` — **do NOT press Enter.** Leave it. Back to T1.
    shows **6**, and three presses later: red HALTED banner. Act done. ~42 presses total.
    *(Running late? At any point press `r` and it finishes itself, animated.)*
 
-## ACT 2 — YOU vs THE MACHINE (2:30 – 4:00)
+## ACT 2 — YOU vs THE MACHINE (3:00 – 4:45)
 
 1. Ask the room: **"Someone give me a number under 20."**
 2. Press `n` → the bottom of the screen literally asks: `a number under 20, please:`
@@ -100,7 +100,7 @@ Type `./machine B` — **do NOT press Enter.** Leave it. Back to T1.
    `ADD R0, R1`, middle column says `8193`. *"I converted nothing. One thing in memory,
    two ways to read it. Remember that for the finale."*
 
-## ACT 3 — BE THE ASSEMBLER (4:00 – 5:15)
+## ACT 3 — BE THE ASSEMBLER (4:45 – 6:30)
 
 1. Ask: **"Give me a pocket, 0 to 3, and a digit, 0 to 9."** (Digits only — never hex, live.)
 2. Press `n` → fresh machine.
@@ -112,8 +112,11 @@ Type `./machine B` — **do NOT press Enter.** Leave it. Back to T1.
    -- hand-assembled by a human`. Read it out.
 7. Press `space` three times — grab, understand, do — pocket **R3 now holds their 7**.
    *"I just wrote a program by hand, as a number. That's all an assembler is: a translator."*
+8. **Encore — only if the room is warm and you're on time:** the finger is now on box 01.
+   Take a second pocket + digit, build it aloud (`1`, pocket, `0`, digit), press `p`,
+   slot `01`, the value, `Enter`, then `space` ×3 → a second pocket fills. Then stop for real.
 
-## ACT 4 — THE FINALE (5:15 – 7:00)
+## ACT 4 — THE FINALE (6:30 – 8:45)
 
 1. Press `n` → the finale loads. **Don't step yet.**
 2. Point at box **07**: `JMP 0x00`. *"The last line says GO BACK TO THE START. This
@@ -130,7 +133,7 @@ Type `./machine B` — **do NOT press Enter.** Leave it. Back to T1.
    and it's exactly what real chips forbid, for safety."*
    *(~36 presses of rhythm; pressing `r` finishes it in a second if time is dying.)*
 
-## THE CLOSE (7:00) — T2's moment
+## THE CLOSE (8:45) — T2's moment
 
 1. Switch to the App Lab window — `./machine B` is already typed there.
 2. Hold up / point at the board: *"Five hundred lines of C. It doesn't need my laptop —
